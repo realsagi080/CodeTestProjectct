@@ -13,7 +13,10 @@ end  end)  end end)
 function LoadingScrpit()
 pcall(function()
 if _G.Code_X_load == nil then
-    
+    game:GetService("StarterGui"):SetCore("SendNotification",{     
+Title = "Character Name",     
+Text = "load",
+Duration = 15, })  
     local Library = loadstring(game:HttpGet('https://pastebin.com/raw/rDxkBa5c'))()
     local repo = 'https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/'
     local ThemeManager = loadstring(game:HttpGet("https://pastebin.com/raw/xAjzwwdR"))()
@@ -471,7 +474,10 @@ local Tabs = {
     Main4 = Window:AddTab("Misc"),
    ['UI Settings'] = Window:AddTab('UI'),
 }
-
+game:GetService("StarterGui"):SetCore("SendNotification",{     
+Title = "Character Name",     
+Text = "1",
+Duration = 15, })  
 
 if getgenv().package_world == nil then
 getgenv().package_world = {} end
@@ -676,7 +682,10 @@ getgenv().Up_Index  = {} end
 if getgenv().Equipunit  == nil then
 getgenv().Equipunit  = {} end
 
-
+game:GetService("StarterGui"):SetCore("SendNotification",{     
+Title = "Character Name",     
+Text = "2",
+Duration = 15, })  
 --- londing config
 
 
@@ -760,7 +769,10 @@ if getgenv().Use_Config_Webhook  then
 end
 
 
-
+game:GetService("StarterGui"):SetCore("SendNotification",{     
+Title = "Character Name",     
+Text = "3",
+Duration = 15, })  
 
 -----------------
 
