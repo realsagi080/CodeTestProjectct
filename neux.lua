@@ -2,7 +2,7 @@ repeat task.wait() until game:IsLoaded()
 if game.PlaceId == 8304191830  then ---  check lobby
 _G.IsLobby = true else _G.IsLobby = false end 
 function LoadingScrpit()                    
-local codexlibrary = loadstring(game:HttpGet("https://pastebin.com/raw/02daXBSx"))()
+local codexlibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/realsagi080/CodeTestProjectct/main/neux.lua"))()
 if not isfolder("Code X Hub") then 
 makefolder("Code X Hub")
 end
@@ -896,7 +896,7 @@ Package_World = {"Planet Namak","Shiganshinu District","Snowy Town","Hidden Sand
     end
  end
 --------------
---task.wait(5)
+task.wait(5)
 
 codexlibrary.Init()
 local create = codexlibrary.Create({})
