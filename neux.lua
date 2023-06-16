@@ -2,7 +2,7 @@ repeat task.wait() until game:IsLoaded()
 if game.PlaceId == 8304191830  then ---  check lobby
 _G.IsLobby = true else _G.IsLobby = false end 
 function LoadingScrpit()                    
-local codexlibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/realsagi080/CodeTestProjectct/main/neux.lua"))()
+local codexlibrary = loadstring(game:HttpGet("https://pastebin.com/raw/02daXBSx"))()
 if not isfolder("Code X Hub") then 
 makefolder("Code X Hub")
 end
@@ -993,7 +993,7 @@ mu3 = TestPage.Dropdown({
 t1 = TestPage.Toggle({
 	Title = "Auto Join Select World", 
 	Desc = "This function if you are in the lobby will automatically join the selected world.", 
-	Default = getgenv().auto_start_main_world, 
+	Default = false, 
 	callback = function(v)
             getgenv().auto_start_main_world = v
            Json_Update_data()
@@ -1364,36 +1364,34 @@ function Item_Drop_End_game()
 
 
 spawn(function()
-       while wait() do
+       while task.wait(.1) do
        pcall(function()
-        if package_Variables[8].PlayerGui.ResultsUI.Enabled == true then 
-            package_Variables[8].PlayerGui.ResultsUI.Holder.Buttons.Next.Size = UDim2.new(200,200,200,200)  
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(math.random(100,1200), math.random(100,1200), 0, true, game, 1)
-            wait()
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(math.random(100,1200), math.random(100,1200), 0, false, game, 1)
-        end 
        if package_Variables[1]:WaitForChild("_DATA"):WaitForChild("GameFinished").Value == true and package_Variables[8].PlayerGui.ResultsUI.Holder.Visible == false then
-            if package_Variables[1].ignore:FindFirstChildOfClass("Model") then
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(784, 529, 0, true, game, 1)
-            elseif not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
-            task.wait(2)
-            if not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
-            game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Finished.Visible = true
+          if package_Variables[1].ignore:FindFirstChildOfClass("Model") then
+               game:GetService("VirtualInputManager"):SendMouseButtonEvent(784, 529, 0, true, game, 1)
+           elseif not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
+           task.wait(2)
+           if not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
+           game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Finished.Visible = true
             if getgenv().Auto_replay and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true then
-            if package_Variables[8].PlayerGui.ResultsUI.Finished.NextRetry.Visible == true then
-                     
-            task.wait(5)
-            elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and not getgenv().Auto_NextLevel then
-            package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
-            task.wait(5)
+              if package_Variables[8].PlayerGui.ResultsUI.Finished.NextRetry.Visible == true then
+                  for i,v in pairs(getconnections(package_Variables[8].PlayerGui.ResultsUI.Finished.NextRetry.Activated)) do
+                   v:Fire()
+               end
+               task.wait(5)
+           elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and not getgenv().Auto_NextLevel then
+                   package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
+                   task.wait(5)
             end
             elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true and not getgenv().Auto_NextLevel then
-                        package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
-                        task.wait(5)
-                        elseif not getgenv().Auto_replay  and not  getgenv().Auto_Black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true  
-                        and getgenv().Auto_NextLevel then
-                        for i,v in pairs(getconnections(package_Variables[8].PlayerGui.ResultsUI.Finished.NextLevel.Activated)) do v:Fire() end 
-                        task.wait(5)
+               package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
+            task.wait(5)
+                    elseif not getgenv().Auto_replay  and not  getgenv().Auto_Black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true  
+           and getgenv().Auto_NextLevel then
+             for i,v in pairs(getconnections(package_Variables[8].PlayerGui.ResultsUI.Finished.NextLevel.Activated)) do
+                   v:Fire()
+             end 
+           task.wait(5)
                         end
                     end
                 end
@@ -1401,9 +1399,50 @@ spawn(function()
         end)
     end
 end)
-
-
-
+spawn(function()
+       local GameFinished = game:GetService("Workspace"):WaitForChild("_DATA"):WaitForChild("GameFinished")
+           GameFinished:GetPropertyChangedSignal("Value"):Connect(function()
+       if GameFinished.Value == true   then   
+       repeat task.wait() until package_Variables[8].PlayerGui.ResultsUI.Enabled == true
+       
+       if getgenv().auto_next_story and tostring(package_Variables[8]
+       .PlayerGui.ResultsUI.Holder.Title.Text) == "VICTORY" then
+       AutoNextStory_A()
+   
+       for i,v in pairs(require(package_Variables[3].src.Data.Worlds))do
+           for x,y in  pairs(v.levels)do
+             if tonumber(string.match(getgenv().Next_Story,"%d+")) == 1 and getgenv().Next_Story == y.id then      
+            getgenv().world_select = v.name   
+               Options.Dropdown1:SetValue(getgenv().world_select)   
+            getgenv().stage_select = getgenv().Next_Story    
+            Json_Update_data()   
+            else
+               getgenv().stage_select = getgenv().Next_Story    
+               Json_Update_data()   
+                   end
+               end
+           end
+        end
+       if  getgenv().WebhookEndGame == true and package_Variables[8].PlayerGui.ResultsUI.Holder.Visible == true then
+        for i,v in pairs(getconnections(package_Variables[8].PlayerGui.ResultsUI.Holder.Buttons.Next.Activated)) do
+           v:Fire()
+       end
+       task.wait(1)
+           if non_webhook == nil then
+           non_webhook = true    
+           Item_Drop_End_game()
+           Webhook_End__game()
+       end              
+       elseif not getgenv().WebhookEndGame  and package_Variables[8].PlayerGui.ResultsUI.Holder.Visible == true then
+       task.wait(2)
+       for i,v in pairs(getconnections(package_Variables[8].PlayerGui.ResultsUI.Holder.Buttons.Next.Activated)) do
+       v:Fire()
+       task.wait(2) 
+                   end
+               end
+           end
+       end)
+   end)
 spawn(function()
     while wait()  do 
             pcall(function()
