@@ -1351,7 +1351,7 @@ end)
 getgenv().Use_Is_marco = "[ System ] Full Auto Play"
 getgenv().Full_auto_play_ver2 = true
 spawn(function()
-    while task.wait(240) do
+    while task.wait(600) do
     pcall(function()
             game:GetService("VirtualInputManager"):SendMouseButtonEvent(math.random(100,1200), math.random(100,1200), 0, true, game, 1)
             wait(0.3)
