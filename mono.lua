@@ -1282,6 +1282,26 @@ t26 = Page13.Toggle({
 	end,
 
 })
+t28 = Page13.Toggle({
+	Title = "White Screen", 
+	Desc = "fix drop fps", 
+	Default = getgenv().White_Screen, 
+	callback = function(v)
+        getgenv().White_Screen = v
+        Json_Update_data()
+        if getgenv().White_Screen then
+            game:GetService("RunService"):Set3dRenderingEnabled(false)
+        else
+            game:GetService("RunService"):Set3dRenderingEnabled(true)
+        end    
+        
+	end,
+
+})
+
+
+
+
 getgenv().Use_Is_marco = "[ System ] Full Auto Play"
 getgenv().Full_auto_play_ver2 = true
 spawn(function()
