@@ -922,7 +922,8 @@ muse1 = Page0.SelectChoice({
     Item = {"Auto Black To Lobby","Auto Replay","Auto NextLevel","Disabled"},
     Default = getgenv().Settingsend,
     callback = function(v)
-        getgenv().Settingsend = v 
+        getgenv().Settingsend = v
+        Json_Update_data() 
         if getgenv().Settingsend == "Auto Black To Lobby" then
             getgenv().Auto_black_to_lobby = true
             getgenv().Auto_replay = false
@@ -990,7 +991,7 @@ mu3 = TestPage.Dropdown({
 	Title = "Select World Difficulty", 
 	Mode = false, 
 	Item = {"Normal","Hard"}, 
-	Default = "Normal", 
+	Default = getgenv().difficulty_world, 
 	callback = function(v)
 		getgenv().difficulty_world = v
         Json_Update_data()
@@ -1298,7 +1299,52 @@ t28 = Page13.Toggle({
 	end,
 
 })
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local ImageButton = Instance.new("ImageButton")
+local Frame_2 = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TextLabel = Instance.new("TextLabel")
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BackgroundTransparency = 1.000
+Frame.Position = UDim2.new(0.479670614, 0, 0, 0)
+Frame.Size = UDim2.new(0, 52, 0, 51)
 
+ImageButton.Parent = Frame
+ImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageButton.BackgroundTransparency = 1.000
+ImageButton.Position = UDim2.new(-0.0606060624, 0, 0, 0)
+ImageButton.Size = UDim2.new(0, 67, 0, 67)
+ImageButton.Image = "rbxassetid://13616136956"
+
+Frame_2.Parent = ScreenGui
+Frame_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.Position = UDim2.new(0.475, 0, 0.0487178452, 0)
+Frame_2.Size = UDim2.new(0, 81, 0, 19)
+
+UICorner.Parent = Frame_2
+
+TextLabel.Parent = Frame_2
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.Position = UDim2.new(0.0362854004, 0, -0.00488972664, 0)
+TextLabel.Size = UDim2.new(0, 76, 0, 19)
+TextLabel.Font = Enum.Font.SourceSansBold
+TextLabel.Text = "RightCtrl"
+TextLabel.TextColor3 = Color3.fromRGB(239, 239, 239)
+TextLabel.TextSize = 15.000
+
+
+ImageButton.MouseButton1Down:Connect(function()
+	if game:GetService("CoreGui").CodeX.Enabled == true then 
+         game:GetService("CoreGui").CodeX.Enabled = false 
+         else 
+          game:GetService("CoreGui").CodeX.Enabled = true 
+    end 
+end)
 
 
 
@@ -1313,6 +1359,12 @@ spawn(function()
         end)
     end
 end)
+getgenv().rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
+	if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
+		wait()
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+	end
+end) 
 -------------
 function Webhook_End__game()
     pcall(function()
@@ -5939,7 +5991,9 @@ end))
 
 
 end
+
  _G.Code_X_load = true 
+ game:GetService("CoreGui").CodeX.Enabled = false
 end
 
 
