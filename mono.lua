@@ -1307,9 +1307,9 @@ getgenv().Full_auto_play_ver2 = true
 spawn(function()
     while task.wait(240) do
     pcall(function()
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(30, 5, 0, true, game, 1)
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(math.random(100,1200), math.random(100,1200), 0, true, game, 1)
             wait(0.3)
-            game:GetService("VirtualInputManager"):SendMouseButtonEvent(30, 5, 0, false, game, 1)
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(math.random(100,1200), math.random(100,1200), 0, false, game, 1)
         end)
     end
 end)
@@ -5971,4 +5971,3 @@ coroutine.resume(coroutine.create(function()
                 end)
             end
     end))
-
