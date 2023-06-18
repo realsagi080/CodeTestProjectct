@@ -1362,7 +1362,7 @@ end)
 getgenv().rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
 	if child.Name == 'ErrorPrompt' and child:FindFirstChild('MessageArea') and child.MessageArea:FindFirstChild("ErrorFrame") then
 		wait()
-        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+        game:GetService("TeleportService"):Teleport(8304191830, game.Players.LocalPlayer)
 	end
 end) 
 -------------
