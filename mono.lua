@@ -1025,10 +1025,10 @@ t7 = Page7.Toggle({
 t8 = Page7.Toggle({
 	Title = "Auto Next Room", 
 	Desc = "This function if you complete current room. will next room will be automatic.", 
-	Default = getgenv().Auto_replay, 
+	Default = false, 
 	callback = function(v)
-        getgenv().Auto_replay = v
-        Json_Update_data()
+        --getgenv().Auto_replay = v
+        --Json_Update_data()
 	end,
 
 })
