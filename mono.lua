@@ -1282,13 +1282,17 @@ t26 = Page13.Toggle({
 	end,
 
 })
-
-
-
-
- getgenv().Use_Is_marco = "[ System ] Full Auto Play"
- getgenv().Full_auto_play_ver2 = true
-
+getgenv().Use_Is_marco = "[ System ] Full Auto Play"
+getgenv().Full_auto_play_ver2 = true
+spawn(function()
+    while task.wait(240) do
+    pcall(function()
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(30, 5, 0, true, game, 1)
+            wait(0.3)
+            game:GetService("VirtualInputManager"):SendMouseButtonEvent(30, 5, 0, false, game, 1)
+        end)
+    end
+end)
 -------------
 function Webhook_End__game()
     pcall(function()
