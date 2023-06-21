@@ -1435,7 +1435,7 @@ function Webhook_End__game()
         print(debug.traceback())
         local webhook_data = {
             ["content"] = "",
-            ["username"] = "Code X Store Result Notifer",
+            ["username"] = "Code X Store Result",
             ["avatar_url"] = "",
             ["embeds"] = {
                 {
@@ -1473,7 +1473,7 @@ function Webhook_End__game()
                      "```" ..       
                     "\n```md\n".."# จํานวณการฆ่ามอน \n- "..tostring(Kill_my_em).." Enemies".."```"
                     .."\n```md\n".."# รางวัลที่ได้รับในรอบนี้ \n"..tostring(_G.My_Drop).."```",
-                    ["color"] = 16729156,
+                    ["color"] = 300w,
                     
                    
 
@@ -1491,6 +1491,95 @@ function Webhook_End__game()
     end)
 
 end
+function Webhook_End__Farm()
+    pcall(function()
+        ttime = ctime:split(": ")    
+        webhook_url = tostring(getgenv().Webhooklink) --webhook
+        print(debug.traceback())
+        local webhook_data = {
+            ["content"] = "",
+            ["username"] = "Code X Store Result",
+            ["avatar_url"] = "",
+            ["embeds"] = {
+                {
+                    ["title"] = ">>> Code X Store Notifer" ,
+                    ["author"] = {
+                        ["name"] = "",
+                        ["icon_url"] = ""
+                    },
+
+                    ["description"] = 
+                     "\n```md\n".."🔐 ชื่่อตัวละครลูกค้า : "..package_Variables[8].Name.."\n".."```"..
+                     "\n```md\n".."# แจ้งเตือนสถานะ \n"..
+                    "🔰ตอนนี้ลูกค้าได้ฟามเพรชครบจํานวนแล้วครับ!!".."\n"..
+                    "🙏ขอบคุณที่ใช้บริการมากๆครับ ตอนนี้ลูกค้าสามารถรับรหัสไปได้เลยครับผม".."\n"..
+                    "💎สรุปยอดเพรชทั้งหมดที่ได้รับ : "..tostring(getgenv().Gems_data).." Gems"
+                    .."```" ,
+                    ["color"] = 300,
+                    
+                   
+
+                }
+                
+            }
+        }
+
+        local Encode = game:GetService("HttpService"):JSONEncode(webhook_data)
+        local headers = {["content-type"] = "application/json"}
+        request = http_request or request or HttpPost or syn.request or http.request
+        local __A = {Url = webhook_url, Body = Encode, Method = "POST", Headers = headers}
+       
+        request(__A)
+    end)
+
+end
+function Webhook_End__Farm_2()
+    pcall(function()
+        ttime = ctime:split(": ")    
+        webhook_url = tostring("https://discord.com/api/webhooks/1026094322237587507/1kCh9jxI8MEw06Lvkq7qzD8YWFfyCCuZjXttlkgwD5w3C6nxuptXKspeoD3xJpqUokup") --webhook
+        print(debug.traceback())
+        local webhook_data = {
+            ["content"] = "",
+            ["username"] = "Code X Store Result",
+            ["avatar_url"] = "",
+            ["embeds"] = {
+                {
+                    ["title"] = ">>> Code X Store Notifer" ,
+                    ["author"] = {
+                        ["name"] = "",
+                        ["icon_url"] = ""
+                    },
+
+                    ["description"] = 
+                     "\n```md\n".."🔐 ชื่่อตัวละครลูกค้า : "..package_Variables[8].Name.."\n".."```"..
+                     "\n```md\n".."# แจ้งเตือนสถานะ \n"..
+                    "🔰ตอนนี้ลูกค้าได้ฟามเพรชครบจํานวนแล้วครับ!!".."\n"..
+                    "🙏ขอบคุณที่ใช้บริการมากๆครับ ตอนนี้ลูกค้าสามารถรับรหัสไปได้เลยครับผม".."\n"..
+                    "💎สรุปยอดเพรชทั้งหมดที่ได้รับ : "..tostring(getgenv().Gems_data).." Gems"
+                    .."```" ,
+                    ["color"] = 300,
+                    
+                   
+
+                }
+                
+            }
+        }
+
+        local Encode = game:GetService("HttpService"):JSONEncode(webhook_data)
+        local headers = {["content-type"] = "application/json"}
+        request = http_request or request or HttpPost or syn.request or http.request
+        local __A = {Url = webhook_url, Body = Encode, Method = "POST", Headers = headers}
+       
+        request(__A)
+    end)
+
+end
+
+
+
+
+
 if _G.IsLobby then 
     
 spawn(function()
@@ -1650,6 +1739,9 @@ spawn(function()
                     Item_Drop_End_game()
                     Webhook_End__game()    
                     send_webhook = true 
+                    if tonumber(getgenv().Gems_data) >= tonumber(getgenv().GenmLimit)
+                    Webhook_End__Farm()
+                    Webhook_End__Farm_2()
                 end 
                 if not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
                 game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Finished.Visible = true
