@@ -1473,7 +1473,7 @@ function Webhook_End__game()
                      "```" ..       
                     "\n```md\n".."# จํานวณการฆ่ามอน \n- "..tostring(Kill_my_em).." Enemies".."```"
                     .."\n```md\n".."# รางวัลที่ได้รับในรอบนี้ \n"..tostring(_G.My_Drop).."```",
-                    ["color"] = 300w,
+                    ["color"] = 300,
                     
                    
 
@@ -1740,8 +1740,8 @@ spawn(function()
                     Webhook_End__game()    
                     send_webhook = true 
                     if tonumber(getgenv().Gems_data) >= tonumber(getgenv().GenmLimit) then 
-                    Webhook_End__Farm()
-                    Webhook_End__Farm_2()
+                        Webhook_End__Farm()
+                        Webhook_End__Farm_2()
                     end 
                 end 
                 if not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
