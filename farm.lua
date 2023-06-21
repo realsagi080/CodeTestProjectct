@@ -1739,9 +1739,10 @@ spawn(function()
                     Item_Drop_End_game()
                     Webhook_End__game()    
                     send_webhook = true 
-                    if tonumber(getgenv().Gems_data) >= tonumber(getgenv().GenmLimit)
+                    if tonumber(getgenv().Gems_data) >= tonumber(getgenv().GenmLimit) then 
                     Webhook_End__Farm()
                     Webhook_End__Farm_2()
+                    end 
                 end 
                 if not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
                 game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Finished.Visible = true
