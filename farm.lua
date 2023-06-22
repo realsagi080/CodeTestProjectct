@@ -218,6 +218,7 @@ getgenv().Settingsend = Decode.Settingsend
 getgenv().GenmLimit = Decode.GenmLimit 
 getgenv().Gems_data = Decode.Gems_data
 getgenv().PackageSet = Decode.PackageSet
+getgenv().Auto_Next_Room = Decode.Auto_Next_Room
 
     getgenv().Json_Update_data = function() -- save data .json
         local my_data = {
@@ -392,7 +393,8 @@ Tournament_Team = getgenv().Tournament_Team ,
 Settingsend = getgenv().Settingsend,
 GenmLimit  = getgenv().GenmLimit ,
 Gems_data = getgenv().Gems_data,
-PackageSet = getgenv().PackageSet
+PackageSet = getgenv().PackageSet,
+Auto_Next_Room = getgenv().Auto_Next_Room
         }
         local is_json = package_Variables[4]:JSONEncode(my_data)
         writefile("Code X Hub/Anime Adventures/User".."/"..package_Variables[8].Name..".json", is_json)
@@ -870,7 +872,7 @@ end Get_uuid()
     end
 end Get_Cap_Unit()    
 package_Item_data = {}
-Package_World = {"Planet Namak","Shiganshinu District","Snowy Town","Hidden Sand Village","Marine's Ford","Ghoul City","Hollow World","Ant Kingdom","Magic Town","Cursed Academy","Clover Kingdom","Cape Canaveral","Alien Spaceship","Fabled Kingdom","Hero City","Puppet Island"}
+Package_World = {"Planet Namak","Shiganshinu District","Snowy Town","Hidden Sand Village","Marine's Ford","Ghoul City","Hollow World","Ant Kingdom","Magic Town","Cursed Academy","Clover Kingdom","Cape Canaveral","Alien Spaceship","Fabled Kingdom","Hero City","Puppet Island","Virtual Dungeon"}
  function getworld(world)
     if world == "Planet Namak" then 
         Package_Stages = {"namek_level_1","namek_level_2","namek_level_3","namek_level_4","namek_level_5","namek_level_6","namek_infinite"}
@@ -902,6 +904,8 @@ Package_World = {"Planet Namak","Shiganshinu District","Snowy Town","Hidden Sand
         Package_Stages = {"mha_level_1","mha_level_2","mha_level_3","mha_level_4","mha_level_5","mha_level_6","mha_infinite"}
     elseif world == "Puppet Island" then
         Package_Stages = {"dressrosa_level_1","dressrosa_level_2","dressrosa_level_3","dressrosa_level_4","dressrosa_level_5","dressrosa_level_6","dressrosa_infinite"}
+    elseif world == "Virtual Dungeon" then
+        Package_Stages = {"sao_level_1","sao_level_2","sao_level_3","sao_level_4","sao_level_5","sao_level_6","sao_infinite"}
     end
     if _G.Code_X_load == true then 
     	for ix,vx in pairs(Package_Stages)do
@@ -1038,10 +1042,10 @@ t7 = Page7.Toggle({
 t8 = Page7.Toggle({
 	Title = "Auto Next Room", 
 	Desc = "This function if you complete current room. will next room will be automatic.", 
-	Default = false, 
+	Default = getgenv().Auto_Next_Room, 
 	callback = function(v)
-        --getgenv().Auto_replay = v
-        --Json_Update_data()
+        getgenv().Auto_Next_Room = v
+        Json_Update_data()
 	end,
 
 })
@@ -1361,9 +1365,9 @@ t28 = Page13.Toggle({
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local ImageButton = Instance.new("ImageButton")
-local Frame_2 = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local TextLabel = Instance.new("TextLabel")
+--local Frame_2 = Instance.new("Frame")
+--local UICorner = Instance.new("UICorner")
+--local TextLabel = Instance.new("TextLabel")
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Frame.Parent = ScreenGui
@@ -1379,7 +1383,7 @@ ImageButton.Position = UDim2.new(-0.0606060624, 0, 0, 0)
 ImageButton.Size = UDim2.new(0, 67, 0, 67)
 ImageButton.Image = "rbxassetid://13616136956"
 
-Frame_2.Parent = ScreenGui
+--[[Frame_2.Parent = ScreenGui
 Frame_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Frame_2.Position = UDim2.new(0.475, 0, 0.0487178452, 0)
 Frame_2.Size = UDim2.new(0, 81, 0, 19)
@@ -1394,7 +1398,7 @@ TextLabel.Size = UDim2.new(0, 76, 0, 19)
 TextLabel.Font = Enum.Font.SourceSansBold
 TextLabel.Text = "RightCtrl"
 TextLabel.TextColor3 = Color3.fromRGB(239, 239, 239)
-TextLabel.TextSize = 15.000
+TextLabel.TextSize = 15.000]]
 
 
 ImageButton.MouseButton1Down:Connect(function()
@@ -1627,6 +1631,19 @@ spawn(function()
                     end
                 end  
             end 
+            if getgenv().Auto_Infinite_Castle then 
+                if getgenv().Auto_Start then
+                    stringtonum = string.match(game:GetService("Players").LocalPlayer.PlayerGui.InfiniteTowerUI.LevelSelect.InfoFrame.LevelTitle.Text,"%d+")
+                    if getgenv().Auto_Team_Swap == true and getgenv().Story_Team ~= nil then
+                    args = {[1] = tostring(getgenv().Story_Team)}
+                    package_Variables[3].endpoints.client_to_server.switch_team_loadout:InvokeServer(unpack(args))
+                    task.wait(1)
+                    end
+                    Args__ = {[1] = tonumber(string.match(package_Variables[8].PlayerGui.InfiniteTowerUI.LevelSelect.InfoFrame.LevelTitle.Text,"%d+")) }
+                    package_Variables[3].endpoints.client_to_server.request_start_infinite_tower:InvokeServer(unpack(Args__))
+                    task.wait(30)
+                end
+            end
         end)
     end 
 end)
@@ -1746,21 +1763,25 @@ spawn(function()
                 end 
                 if not package_Variables[1].ignore:FindFirstChildOfClass("Model")  then
                 game:GetService("Players").LocalPlayer.PlayerGui.ResultsUI.Finished.Visible = true
-                if getgenv().Auto_replay and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true then
-                if package_Variables[8].PlayerGui.ResultsUI.Finished.NextRetry.Visible == true then
-                package_Variables[3].endpoints.client_to_server.set_game_finished_vote:InvokeServer("replay")    
-                task.wait(5)
-                elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and not getgenv().Auto_NextLevel then
-                package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
-                task.wait(5)
-                end
-                elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true and not getgenv().Auto_NextLevel then
-                package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
-                task.wait(5)
-                elseif not getgenv().Auto_replay  and not  getgenv().Auto_Black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true  
-                and getgenv().Auto_NextLevel then
-                package_Variables[3].endpoints.client_to_server.set_game_finished_vote:InvokeServer("next_story")   
-                task.wait(5)
+                    if getgenv().Auto_Next_Room and string.find(_G.MapMode,"Infinity Castle") then 
+                        package_Variables[3].endpoints.client_to_server.request_start_infinite_tower_from_game:InvokeServer()
+                        task.wait(10)
+                    end    
+                    if getgenv().Auto_replay and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true then
+                        if package_Variables[8].PlayerGui.ResultsUI.Finished.NextRetry.Visible == true then
+                             package_Variables[3].endpoints.client_to_server.set_game_finished_vote:InvokeServer("replay")    
+                            task.wait(10)
+                            elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and not getgenv().Auto_NextLevel then
+                            package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
+                            task.wait(10)
+                            end
+                            elseif not getgenv().Auto_replay and getgenv().Auto_black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true and not getgenv().Auto_NextLevel then
+                            package_Variables[3].endpoints.client_to_server.teleport_back_to_lobby:InvokeServer()
+                            task.wait(10)
+                            elseif not getgenv().Auto_replay  and not  getgenv().Auto_Black_to_lobby and package_Variables[8].PlayerGui.ResultsUI.Finished.Visible == true  
+                            and getgenv().Auto_NextLevel then
+                            package_Variables[3].endpoints.client_to_server.set_game_finished_vote:InvokeServer("next_story")   
+                            task.wait(10)
                         end
                     end
                 end
@@ -3160,8 +3181,58 @@ if string.find(_G.MapName,"Planet Namak") then
             Part2_g.CFrame = CFrame.new(49.62041473388672, 2.6000008583068848, -149.64883422851562)
             Part3_g.CFrame = CFrame.new(84.64189147949219, 2.6000008583068848, -149.52719116210938)
             Part4_g.CFrame = CFrame.new(106.7662353515625, 2.600001573562622, -170.0411376953125)     
-
-
+        elseif string.find(_G.MapName,"Virtual Dungeon") then    
+            local Part1 = Instance.new("Part")
+            local Part2 = Instance.new("Part")
+            Part1.Name = "1"
+            Part2.Name = "2"
+            Part1.Size = Vector3.new(1,1,1)
+            Part2.Size = Vector3.new(1,1,1)
+            Part1.Parent = game:GetService("Workspace")["Code X Hub"]["hill"]
+            Part2.Parent = game:GetService("Workspace")["Code X Hub"]["hill"]
+            Part1.Anchored = true
+            Part2.Anchored = true
+            Part1.CanCollide = false
+            Part2.CanCollide = false
+            Part1.Transparency = 1
+            Part2.Transparency = 1
+            Part1.CFrame = CFrame.new(102.8636703491211, 41.67760467529297, 13.247537612915039)
+            Part2.CFrame = CFrame.new(69.51323699951172, 41.67760467529297, 16.593656539916992)
+            local Part1_g = Instance.new("Part")
+            local Part2_g = Instance.new("Part")
+            local Part3_g = Instance.new("Part")
+            local Part4_g = Instance.new("Part")
+            Part1_g.Name = "1"
+            Part2_g.Name = "2"
+            Part3_g.Name = "3"
+            Part4_g.Name = "4"
+            Part1_g.Size = Vector3.new(1,1,1)
+            Part2_g.Size = Vector3.new(1,1,1)
+            Part3_g.Size = Vector3.new(1,1,1)
+            Part4_g.Size = Vector3.new(1,1,1)
+            Part1_g.Parent = game:GetService("Workspace")["Code X Hub"]["ground"]
+            Part2_g.Parent = game:GetService("Workspace")["Code X Hub"]["ground"]
+            Part3_g.Parent = game:GetService("Workspace")["Code X Hub"]["ground"]
+            Part4_g.Parent = game:GetService("Workspace")["Code X Hub"]["ground"]
+            Part1_g.CanCollide = false
+            
+            Part2_g.CanCollide = false
+            Part3_g.CanCollide = false
+            Part4_g.CanCollide = false
+            Part1_g.Anchored = true
+            Part2_g.Anchored = true
+            Part3_g.Anchored = true
+            Part4_g.Anchored = true
+    
+            Part1_g.Transparency = 1
+            Part2_g.Transparency = 1
+            Part3_g.Transparency = 1
+            Part4_g.Transparency = 1
+    
+            Part1_g.CFrame = CFrame.new(100.29022979736328, 37.53697967529297, 2.873872756958008)
+            Part2_g.CFrame = CFrame.new(84.1074447631836, 37.411773681640625, 19.45977020263672)
+            Part3_g.CFrame = CFrame.new(62.420040130615234, 37.411773681640625, 29.373886108398438)
+            Part4_g.CFrame = CFrame.new(38.246578216552734, 37.411773681640625, 20.321231842041016)
 
     end
 end 
@@ -3216,9 +3287,9 @@ end
 -- namak
 
 local namak_pos_ecnomyunit_unit = {
-    [1] = CFrame.new(-2928.533935546875, 91.80620574951172, -700.8051147460938),
-    [2] = CFrame.new(-2928.677001953125, 91.80620574951172, -697.6182861328125),
-    [3] = CFrame.new(-2928.691650390625, 91.80620574951172, -694.1442260742188),
+    [1] = CFrame.new(-2934.395751953125, 91.80620574951172, -715.1732177734375),
+    [2] = CFrame.new(-2921.780517578125, 91.80620574951172, -710.405029296875),
+    [3] = CFrame.new(-2910.142822265625, 91.80620574951172, -739.0060424804688),
     [4] = CFrame.new(-2934.276611328125, 91.80620574951172, -697.7835083007812)
 }
 
@@ -4693,7 +4764,56 @@ Rain_St_G_5 = {
 Rain_St_G_6 = {
     [1] = CFrame.new(174.7165985107422, 536.8999633789062, -484.6338195800781),
 }
-
+Virtual_ec = {
+    [1] =  CFrame.new(174.5595245361328, 37.411773681640625, 35.68671417236328),
+    [2] =  CFrame.new(179.246826171875, 37.411773681640625, 22.748634338378906),
+    [3] =  CFrame.new(173.9812469482422, 37.411773681640625, 7.97308874130249),
+    [4] =  CFrame.new(158.9236297607422, 37.411773681640625, 1.4613733291625977)
+ }
+ 
+ Virtual_G_1 = {
+    [1] = CFrame.new(100.29022979736328, 37.53697967529297, 2.873872756958008),
+    [2] = CFrame.new(100.40447998046875, 37.53697967529297, -0.4812888503074646),
+    [3] =  CFrame.new(103.81401062011719, 37.53697967529297, 2.880046844482422),
+    [4] =  CFrame.new(103.7626724243164, 37.53697967529297, -0.43553727865219116),
+    [5] =  CFrame.new(104.34446716308594, 37.53697967529297, 8.04605484008789),
+    [6] = CFrame.new(100.76347351074219, 37.53697967529297, 8.111042022705078),
+    [7] = CFrame.new(107.54003143310547, 37.53697967529297, 10.252267837524414),
+    [8] = CFrame.new(109.7416000366211, 37.53697967529297, 4.395063400268555),
+    [9] =  CFrame.new(115.07776641845703, 37.536983489990234, 17.117595672607422),
+    [10] = CFrame.new(115.10831451416016, 37.536983489990234, 20.797815322875977),
+    [11] = CFrame.new(118.59928894042969, 37.536983489990234, 21.28009033203125),
+    [12] = CFrame.new(116.66117858886719, 37.536983489990234, 24.38298797607422)
+ }
+ Virtual_G_2 = {
+    [1] = CFrame.new(84.1074447631836, 37.411773681640625, 19.45977020263672),
+ }
+ Virtual_G_3 = {
+    [1] = CFrame.new(62.420040130615234, 37.411773681640625, 29.373886108398438),
+ }
+ Virtual_G_4 = {
+    [1] = CFrame.new(38.246578216552734, 37.411773681640625, 20.321231842041016),
+ }
+ Virtual_A_1 = {
+    [1] = CFrame.new(102.8636703491211, 41.67760467529297, 13.247537612915039),
+    [2] = CFrame.new(99.67443084716797, 41.67760467529297, 13.739356994628906),
+    [3] =  CFrame.new(103.0165786743164, 41.67760467529297, 16.48033332824707),
+    [4] =  CFrame.new(99.71961975097656, 41.67760467529297, 17.000232696533203),
+    [5] =  CFrame.new(105.79447174072266, 41.67760467529297, 15.061018943786621),
+    [6] = CFrame.new(105.87571716308594, 41.67760467529297, 18.342714309692383),
+    [7] = CFrame.new(108.57380676269531, 41.67760467529297, 16.777334213256836),
+    [8] = CFrame.new(108.60445404052734, 41.67760467529297, 20.11810302734375),
+    [9] =  CFrame.new(96.85730743408203, 41.67760467529297, 15.578634262084961),
+    [10] = CFrame.new(97.12736511230469, 41.67760467529297, 18.824569702148438),
+    [11] = CFrame.new(94.42771911621094, 41.67760467529297, 17.474376678466797),
+    [12] = CFrame.new(94.1009750366211, 41.67760467529297, 20.606849670410156)
+ }
+ Virtual_A_2 = {
+    [1] = CFrame.new(69.51323699951172, 41.67760467529297, 16.593656539916992),
+    [2] = CFrame.new(72.80691528320312, 41.67760467529297, 16.274002075195312),
+    [3] =  CFrame.new(75.26544952392578, 41.67760467529297, 13.852506637573242),
+    [4] =  CFrame.new(71.22521209716797, 41.67760467529297, 13.263226509094238)
+  }
  
 
 
@@ -4898,6 +5018,14 @@ elseif string.find(_G.MapName,"Puppet Island") then
     getgenv()["ground_2"] =  Puppet_G_2
     getgenv()["ground_3"] =  Puppet_G_3
     getgenv()["ground_4"] =  Puppet_G_4
+elseif string.find(_G.MapName,"Virtual Dungeon") then  
+    ecnomyunit_pos = Virtual_ec
+    getgenv()["hill_1"] = Virtual_A_1
+    getgenv()["hill_2"] = Virtual_A_2
+    getgenv()["ground_1"] = Virtual_G_1
+    getgenv()["ground_2"] =  Virtual_G_2
+    getgenv()["ground_3"] =  Virtual_G_3
+    getgenv()["ground_4"] =  Virtual_G_4
 end    
 getgenv().tablestack = {
     [1] = game:GetService("Players").LocalPlayer,
@@ -6337,7 +6465,6 @@ coroutine.resume(coroutine.create(function()
                 end)
             end
     end))
-
 
 
 
