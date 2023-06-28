@@ -224,7 +224,8 @@ getgenv().PortalSelectTier = Decode.PortalSelectTier
 getgenv().Portal_Ignore_World = Decode.Portal_Ignore_World
 getgenv().Portal_Ignore_difficulty = Decode.Portal_Ignore_difficulty
 getgenv().Portal_Ignore_Weakness = Decode.Portal_Ignore_Weakness
-
+getgenv().Auto_Join_Portal_main = Decode.Auto_Join_Portal_main
+getgenv().PortalSelectmain = Decode.PortalSelectmain
 
     getgenv().Json_Update_data = function() -- save data .json
         local my_data = {
@@ -405,8 +406,9 @@ Use_Is_marco = getgenv().Use_Is_marco ,
 PortalSelectTier  = getgenv().PortalSelectTier,
 Portal_Ignore_World = getgenv().Portal_Ignore_World,
 Portal_Ignore_difficulty = getgenv().Portal_Ignore_difficulty,
-Portal_Ignore_Weakness = getgenv().Portal_Ignore_Weakness
-
+Portal_Ignore_Weakness = getgenv().Portal_Ignore_Weakness,
+Auto_Join_Portal_main = getgenv().Auto_Join_Portal_main,
+PortalSelectmain = getgenv().PortalSelectmain
 
         }
         local is_json = package_Variables[4]:JSONEncode(my_data)
@@ -1127,7 +1129,6 @@ mu16x = Page20.Dropdown({
         Json_Update_data()
 	end,
 })
-
 
 md1x = Page20.Dropdown({
 	Title = "Select Tier", 
