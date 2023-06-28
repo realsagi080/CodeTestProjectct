@@ -1995,9 +1995,9 @@ spawn(function()
                             end
                         end
                     end   
-                elseif getgenv().PortalSelectmain == "portal_item__dressrosa" then 
+                elseif getgenv().PortalSelectmain == "Puppet Portal" then 
                     for i,v in pairs(portal_data_main)do
-                        if v.uuid and v.item_id == "portal_zeldris" then 
+                        if v.uuid and v.item_id == "portal_item__dressrosa" then 
                             for x,y in pairs(v._unique_item_data._unique_portal_data)do
                                 if tostring(x) == "_weak_against"  then
                                     for x1,y1 in pairs(y)do
@@ -2027,6 +2027,7 @@ spawn(function()
                                                     if table.find(getgenv().PortalSelectTier,tostring(v._unique_item_data._unique_portal_data.portal_depth)) and
                                                     not table.find(getgenv().Portal_Ignore_difficulty,tostring(v._unique_item_data._unique_portal_data.challenge)) and
                                                     not table.find(getgenv().Portal_Ignore_Weakness,tostring(y2)) then
+                                                    if game.Players.LocalPlayer.PlayerGui.LevelSelectGui.Starting.Visible == false then     
                                                     if string.find(v._unique_item_data._unique_portal_data.level_id,"namek") then 
                                                         portal_world = "Planet Namak"
                                                     elseif string.find(v._unique_item_data._unique_portal_data.level_id,"aot") then 
@@ -2060,9 +2061,10 @@ spawn(function()
                                                     elseif string.find(v._unique_item_data._unique_portal_data.level_id,"sao") then 
                                                         portal_world = "Virtual Dungeon"
                                                     end
-                                                    if not table.find(getgenv().Portal_Ignore_World,portal_world) then 
-                                                        args =  {[1] = v.uuid,[2] = {["friends_only"] = true}}
-                                                        game:GetService("ReplicatedStorage").endpoints.client_to_server.use_portal:InvokeServer(unpack(args))  
+                                                        if not table.find(getgenv().Portal_Ignore_World,portal_world) then 
+                                                            args =  {[1] = v.uuid,[2] = {["friends_only"] = true}}
+                                                            game:GetService("ReplicatedStorage").endpoints.client_to_server.use_portal:InvokeServer(unpack(args))  
+                                                        end
                                                     end     
                                                 end            
                                             end        
@@ -2103,17 +2105,40 @@ for i,v in pairs(package_Variables[1]["_LOBBIES"].Story:GetChildren()) do
       end)    
    end
 end
-
+for i,v in pairs(package_Variables[1]["_PORTALS"].Lobbies:GetDescendants()) do
+    if v.Name == "Value" and v.Parent.Name == "Players" then
+        v.Name = tostring(v.Value.Name)   
+    end    
+end
+for i,v in pairs(package_Variables[1]["_PORTALS"].Lobbies:GetChildren()) do
+      if v["Players"] then
+            spawn(function()
+            local Pls_add;
+            Pls_add = v["Players"].ChildAdded:Connect(function(x)
+                x.Name = tostring(x.Value.Name)
+            end)    
+        end)    
+     end
+end
 spawn(function()
     while wait() do 
         pcall(function()
             if getgenv().Auto_Start then 
             for i,v in pairs(package_Variables[1]["_LOBBIES"].Story:GetChildren()) do
                 if v["Players"]:FindFirstChild(package_Variables[8].Name)  then
-                  if getgenv().Auto_Start and not getgenv().Xenon_Share_Start then
+                  if getgenv().Auto_Start and not getgenv().CodeX_Link_Start then
                         task.wait(3)        
                         Args__ = {[1] = v.Name}
                         package_Variables[3].endpoints.client_to_server.request_start_game:InvokeServer(unpack(Args__)) 
+                        end 
+                    end
+                end
+                for i,v in pairs(package_Variables[1]["_PORTALS"].Lobbies:GetChildren()) do
+                    if v["Players"]:FindFirstChild(package_Variables[8].Name)  then
+                        if getgenv().Auto_Start and not getgenv().CodeX_Link_Start then
+                            task.wait(3)    
+                            Args__ = {[1] = v.Name}
+                            package_Variables[3].endpoints.client_to_server.request_start_game:InvokeServer(unpack(Args__))    
                         end 
                     end
                 end
